@@ -1,5 +1,12 @@
 package pl.kryniek.contamination.level.api.model;
 
+import static java.util.Objects.nonNull;
+
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -8,13 +15,16 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 
 @Entity
 @Table(name = "measurement")
@@ -29,25 +39,25 @@ public class Measurement {
 	private Integer sensorId;
 
 	@NotNull(message = "airQualityIndex is null")
-	private Integer airQualityIndex;
+	private Double airQualityIndex;
 
 	@NotNull(message = "humidity is null")
-	private Integer humidity;
+	private Double humidity;
 
 	@NotNull(message = "pm1 is null")
-	private Integer pm1;
+	private Double pm1;
 
 	@NotNull(message = "pm25 is null")
-	private Integer pm25;
+	private Double pm25;
 
 	@NotNull(message = "pm10 is null")
-	private Integer pm10;
+	private Double pm10;
 
 	@NotNull(message = "pressure is null")
-	private Integer pressure;
+	private Double pressure;
 
 	@NotNull(message = "temperature is null")
-	private Integer temperature;
+	private Double temperature;
 
 	@NotNull(message = "pollutionLevel is null")
 	private Integer pollutionLevel;
@@ -60,15 +70,68 @@ public class Measurement {
 
 	@Column(nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	@CreatedDate
 	private Date insertionDate;
+
+	@PrePersist
+	protected void onCreate() {
+		insertionDate = Timestamp.valueOf(LocalDateTime.now());
+	}
+
+	public Measurement() {
+	}
+
+	public Measurement(Integer sensorId) {
+		this.sensorId = sensorId;
+	}
+
+	public boolean areAllFieldsNonNull() {
+		return nonNull(sensorId) && nonNull(airQualityIndex) && nonNull(humidity) && nonNull(pm1) && nonNull(pm25)
+				&& nonNull(pm10) && nonNull(pressure) && nonNull(temperature) && nonNull(pollutionLevel)
+				&& nonNull(fromDateTime) && nonNull(tillDateTime);
+	}
+
+	public void setFieldByName(JsonParser parser, JsonToken token) throws IOException, ParseException {
+		final String AIR_QUALITY_INDEX = "airQualityIndex";
+		final String HUMIDITY = "humidity";
+		final String PM1 = "pm1";
+		final String PM25 = "pm25";
+		final String PM10 = "pm10";
+		final String PRESSURE = "pressure";
+		final String TEMPERATURE = "temperature";
+		final String POLLUTION_LEVEL = "pollutionLevel";
+		final String FROM_DATE_TIME = "fromDateTime";
+		final String TILL_DATE_TIME = "tillDateTime";
+		final String DATE_FORMAT = "yyyy-MM-dd'T'kk:mm:ss'Z'";
+
+		final String fieldName = parser.getCurrentName();
+
+		token = parser.nextToken();
+
+		if (fieldName.equals(AIR_QUALITY_INDEX)) {
+			this.setAirQualityIndex(parser.getValueAsDouble());
+		} else if (fieldName.equals(HUMIDITY)) {
+			this.setHumidity(parser.getValueAsDouble());
+		} else if (fieldName.equals(PM1)) {
+			this.setPm1(parser.getValueAsDouble());
+		} else if (fieldName.equals(PM25)) {
+			this.setPm25(parser.getValueAsDouble());
+		} else if (fieldName.equals(PM10)) {
+			this.setPm10(parser.getValueAsDouble());
+		} else if (fieldName.equals(PRESSURE)) {
+			this.setPressure(parser.getValueAsDouble());
+		} else if (fieldName.equals(TEMPERATURE)) {
+			this.setTemperature(parser.getValueAsDouble());
+		} else if (fieldName.equals(POLLUTION_LEVEL)) {
+			this.setPollutionLevel(parser.getValueAsInt());
+		} else if (fieldName.equals(FROM_DATE_TIME)) {
+			this.setFromDateTime(new SimpleDateFormat(DATE_FORMAT).parse(parser.getValueAsString()));
+		} else if (fieldName.equals(TILL_DATE_TIME)) {
+			this.setTillDateTime(new SimpleDateFormat(DATE_FORMAT).parse(parser.getValueAsString()));
+		}
+	}
 
 	public Long getId() {
 		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public Integer getSensorId() {
@@ -79,59 +142,59 @@ public class Measurement {
 		this.sensorId = sensorId;
 	}
 
-	public Integer getAirQualityIndex() {
+	public Double getAirQualityIndex() {
 		return airQualityIndex;
 	}
 
-	public void setAirQualityIndex(Integer airQualityIndex) {
+	public void setAirQualityIndex(Double airQualityIndex) {
 		this.airQualityIndex = airQualityIndex;
 	}
 
-	public Integer getHumidity() {
+	public Double getHumidity() {
 		return humidity;
 	}
 
-	public void setHumidity(Integer humidity) {
+	public void setHumidity(Double humidity) {
 		this.humidity = humidity;
 	}
 
-	public Integer getPm1() {
+	public Double getPm1() {
 		return pm1;
 	}
 
-	public void setPm1(Integer pm1) {
+	public void setPm1(Double pm1) {
 		this.pm1 = pm1;
 	}
 
-	public Integer getPm25() {
+	public Double getPm25() {
 		return pm25;
 	}
 
-	public void setPm25(Integer pm25) {
+	public void setPm25(Double pm25) {
 		this.pm25 = pm25;
 	}
 
-	public Integer getPm10() {
+	public Double getPm10() {
 		return pm10;
 	}
 
-	public void setPm10(Integer pm10) {
+	public void setPm10(Double pm10) {
 		this.pm10 = pm10;
 	}
 
-	public Integer getPressure() {
+	public Double getPressure() {
 		return pressure;
 	}
 
-	public void setPressure(Integer pressure) {
+	public void setPressure(Double pressure) {
 		this.pressure = pressure;
 	}
 
-	public Integer getTemperature() {
+	public Double getTemperature() {
 		return temperature;
 	}
 
-	public void setTemperature(Integer temperature) {
+	public void setTemperature(Double temperature) {
 		this.temperature = temperature;
 	}
 

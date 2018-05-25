@@ -11,4 +11,9 @@ Run jar: "java -jar ContaminationLevelApi.jar"
 
 # Configuration
 
- - Default port is "6969". If you want to change go to "src/main/resources/application.properties" and type new port in property "server.port"
+Configuration can be modyfied in "src/main/resources/application.properties".
+
+ - Default port is "6969" stored in property: "server.port"
+ - Default data source url is "jdbc:mysql://localhost:3306/contaminationlevel?useSSL=false" stored in property: "spring.datasource.url"
+ - Default db username is "root" stored in property: "spring.datasource.username"
+ - Default db password is "root" stored in property: "spring.datasource.password"
