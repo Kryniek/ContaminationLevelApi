@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,7 @@ public class MeasurementServiceImpl implements MeasurementService {
 	}
 
 	@Override
+	@Transactional
 	public void insertLast24HoursMeasurementsBySensorId(SensorId sensorId) {
 		List<Measurement> measurementsToInsert = airlyApiRestService.getSensorMeasurementsBySensorId(sensorId);
 

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import pl.kryniek.contamination.level.api.definition.MeasurementService;
-import pl.kryniek.contamination.level.api.enums.SensorId;
 import pl.kryniek.contamination.level.api.model.Measurement;
 
 @RestController
@@ -22,9 +21,4 @@ public class MeasurementController {
 	public List<Measurement> getAll() {
 		return measurementService.selectAll();
 	}
-
-//	@GetMapping("/call")
-//	public void callRestApi() {
-//		measurementService.insertLast24HoursMeasurementsBySensorId(SensorId.WEJHEROWO);
-//	}
 }

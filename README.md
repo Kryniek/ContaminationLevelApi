@@ -1,5 +1,5 @@
 # ContaminationLevelApi
-This API provides possibility to examine contamination level in Poland near Wejherowo city.
+This API provides possibility to examine contamination level in Poland in selected cities.
 
 # Build
 
@@ -17,3 +17,4 @@ Configuration can be modyfied in "src/main/resources/application.properties".
  - Default data source url is "jdbc:mysql://localhost:3306/contaminationlevel?useSSL=false" stored in property: "spring.datasource.url"
  - Default db username is "root" stored in property: "spring.datasource.username"
  - Default db password is "root" stored in property: "spring.datasource.password"
+ - Cron task that is resposible for inserting measurements from last 24 hours is configured to work three times a day at 6:00, 14:00 and 22:00 o'clock. Default configuration is stored in property: "cron.scheduler.Measurement.insertForSensorIds".
