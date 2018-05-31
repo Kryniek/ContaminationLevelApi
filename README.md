@@ -8,6 +8,13 @@ Maven package builder: `mvn package`
 # Run
 
 Run jar: `java -jar ContaminationLevelApi.jar`
+or
+Run jar in background on Windows OS: `javaw -jar ContaminationLevelApi.jar`
+
+# Shutdown
+Windows OS:
+ - check task PID named `javaw.exe`, by: `tasklist`
+ - kill `javaw.exe` process, by `taskkill /PID <PID> /F`
 
 # Configuration
 
