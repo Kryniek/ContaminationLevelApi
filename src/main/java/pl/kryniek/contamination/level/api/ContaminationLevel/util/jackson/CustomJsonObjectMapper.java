@@ -15,5 +15,6 @@ public class CustomJsonObjectMapper extends ObjectMapper {
 		this.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
 		this.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 		this.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+		this.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 	}
 }

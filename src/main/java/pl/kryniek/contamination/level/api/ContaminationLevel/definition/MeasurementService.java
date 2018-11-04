@@ -12,4 +12,8 @@ public interface MeasurementService {
 	void insertLast24HoursMeasurementsByInstallationId(InstallationId installationId);
 
 	void saveV1Measurements(List<V1Measurement> mesurements);
+
+	Long count();
+
+	Measurement getLast();
 }

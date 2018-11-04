@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +30,9 @@ public class MeasurementServiceImpl implements MeasurementService {
 
 	@Autowired
 	private AirlyApiRestService airlyApiRestService;
+
+	@Autowired
+	private MongoTemplate mongoTemplate;
 
 	@Override
 	public List<Measurement> selectAll() {
@@ -64,5 +70,18 @@ public class MeasurementServiceImpl implements MeasurementService {
 	@Transactional
 	public void saveV1Measurements(List<V1Measurement> v1Measurements) {
 		repository.saveAll(v1ToV2Model(v1Measurements));
+	}
+
+	@Override
+	public Long count() {
+		return repository.count();
+	}
+
+	@Override
+	public Measurement getLast() {
+		Query query = new Query();
+		query.limit(1).with(new Sort(Sort.Direction.DESC, "id"));
+
+		return mongoTemplate.findOne(query, Measurement.class);
 	}
 }

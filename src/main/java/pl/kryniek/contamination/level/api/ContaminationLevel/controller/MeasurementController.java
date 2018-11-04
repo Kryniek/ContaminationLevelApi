@@ -33,4 +33,14 @@ public class MeasurementController {
 
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
+
+	@GetMapping("/count")
+	public ResponseEntity<Long> count() {
+		return new ResponseEntity<Long>(service.count(), HttpStatus.OK);
+	}
+
+	@GetMapping("/last")
+	public ResponseEntity<Measurement> getLast() {
+		return new ResponseEntity<Measurement>(service.getLast(), HttpStatus.OK);
+	}
 }
