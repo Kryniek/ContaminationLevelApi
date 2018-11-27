@@ -13,7 +13,7 @@ public class MeasurementCron {
 	@Autowired
 	private MeasurementService measurementService;
 
-	@Scheduled(cron = "${cron.scheduler.Measurement.insertForSensorIds}")
+//	@Scheduled(cron = "${cron.scheduler.Measurement.insertForSensorIds}")
 	public void insertForSensorIds() {
 		for (InstallationId installationId : InstallationId.values()) {
 			measurementService.insertLast24HoursMeasurementsByInstallationId(installationId);

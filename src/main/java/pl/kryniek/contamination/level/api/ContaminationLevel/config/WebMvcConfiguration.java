@@ -8,16 +8,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import pl.kryniek.contamination.level.api.ContaminationLevel.util.jackson.CustomJsonObjectMapper;
 
 @Configuration
-@EnableWebMvc
-public class WebMvcConfiguration implements WebMvcConfigurer {
+public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
 	@Bean
 	public RestTemplate restTemplate() {
@@ -42,5 +40,12 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 	@Bean
 	public ObjectMapper objectMapper() {
 		return new CustomJsonObjectMapper();
+	}
+
+	@Override
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+		converters.add(mappingJackson2HttpMessageConverter());
+
+		super.addDefaultHttpMessageConverters(converters);
 	}
 }
